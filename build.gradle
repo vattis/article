@@ -1,3 +1,8 @@
+buildscript {
+	ext {
+		queryDslVersion = "5.0.0"
+	}
+}
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.5'
@@ -27,10 +32,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation "com.querydsl:querydsl-jpa:5.0.0"
-	implementation "com.querydsl:querydsl-apt:5.0.0"
-	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
-	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
+	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+	//annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+	//annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -42,25 +47,24 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 def querydslDir = "$buildDir/generated/querydsl"
+
 querydsl {
 	jpa = true
 	querydslSourcesDir = querydslDir
 }
+
 sourceSets {
 	main.java.srcDir querydslDir
 }
-compileQuerydsl{
+
+configurations {
+	querydsl.extendsFrom compileClasspath
+}
+
+compileQuerydsl {
 	options.annotationProcessorPath = configurations.querydsl
 }
 tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
 }
 
-sourceSets {
-	main.java.srcDir querydslDir
-}
-buildscript {
-	ext {
-		queryDslVersion = "5.0.0"
-	}
-}
