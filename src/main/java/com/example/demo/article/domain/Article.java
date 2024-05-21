@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
-@Slf4j
+@Getter
 @Builder
+@Slf4j
 @AllArgsConstructor
 @NoArgsConstructor
 public class Article {

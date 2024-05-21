@@ -38,4 +38,23 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private final List<Comment> comments = new ArrayList<>();
+
+    public static Member of(String name, String memberId, String memberPw, LocalDateTime createdDate){
+        return Member.builder()
+                .name(name)
+                .memberId(memberId)
+                .memberPw(memberPw)
+                .createdDate(createdDate)
+                .build();
+    }
+    public static Member makeSample(int i){
+        return new Member(null, "name"+i, "memberId"+i, "memberPw"+i, LocalDateTime.now());
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Member)) return false;
+        Member member = (Member) o;
+        return id != null && id.equals(member.id);
+    }
 }
