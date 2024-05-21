@@ -20,11 +20,20 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class ArticleService {
     private final ArticleRepository articleRepository;
     private final CommentRepository commentRepository;
-    @Transactional
-    Page<Article> search(SearchType searchType, String word, int pageNo){
+
+    public Long addArticle(Article article){
+        return articleRepository.save(article).getId();
+    }
+
+    public Article findById(Long id){
+        return articleRepository.findById(id).orElse(null);
+    }
+
+    public Page<Article> search(SearchType searchType, String word, int pageNo){
         Pageable pageable = PageRequest.of(pageNo, PageConst.pageSize, Sort.by("id").ascending());
         if(word.isEmpty()){
             return articleRepository.findAll(pageable);

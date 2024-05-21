@@ -35,4 +35,20 @@ public class Article {
     @OneToMany(mappedBy = "article")
     private List<Comment> comments = new ArrayList<>();
 
+    public static Article makeSample(Member member, int i){
+        return Article.builder()
+                .member(member)
+                .title("title"+i)
+                .content("content"+i)
+                .dateTime(LocalDateTime.now())
+                .build();
+    }
+    public static Article of(Member member, String title, String content){
+        return Article.builder()
+                .member(member)
+                .title(title)
+                .content(content)
+                .dateTime(LocalDateTime.now())
+                .build();
+    }
 }
