@@ -36,6 +36,7 @@ public class Article {
     private LocalDateTime dateTime;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<Comment> comments = new ArrayList<>();
 
     public static Article makeSample(Member member, int i){
