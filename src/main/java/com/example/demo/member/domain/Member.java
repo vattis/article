@@ -21,16 +21,16 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
-    @Column
+    @Column(nullable = false)
     private String memberId;
 
-    @Column
+    @Column(nullable = false)
     private String memberPw;
 
-    @Column
+    @Column(nullable = false)
     private LocalDateTime createdDate;
 
     @OneToMany(mappedBy = "member")

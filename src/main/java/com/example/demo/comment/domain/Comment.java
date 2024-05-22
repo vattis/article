@@ -5,6 +5,7 @@ import com.example.demo.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -19,16 +20,27 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @ManyToOne(optional = false)
+    @Column(nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Article article;
 
-    @ManyToOne(optional = false)
+    @Column(nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Member member;
 
-    @Column
+    @Column(nullable = false)
     private String content;
 
-    @Column
+    @Column(nullable = false)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime createdTime;
 
+    public static Comment of(Article article, Member member, String content, LocalDateTime createdTime){
+        return Comment.builder()
+                .article(article)
+                .member(member)
+                .content(content)
+                .createdTime(createdTime)
+                .build();
+    }
 }
