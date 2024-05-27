@@ -32,6 +32,12 @@ public class Article {
     private String content;
 
     @Column(nullable = false)
+    private Long viewership;
+
+    @Column(nullable = false)
+    private Long likes;
+
+    @Column(nullable = false)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime dateTime;
 
@@ -45,13 +51,17 @@ public class Article {
                 .title("title"+i)
                 .content("content"+i)
                 .dateTime(LocalDateTime.now())
+                .viewership(0L)
+                .likes(0L)
                 .build();
     }
-    public static Article of(Member member, String title, String content){
+    public static Article of(Member member, String title, String content, Long viewership, Long likes){
         return Article.builder()
                 .member(member)
                 .title(title)
                 .content(content)
+                .viewership(viewership)
+                .likes(likes)
                 .dateTime(LocalDateTime.now())
                 .build();
     }

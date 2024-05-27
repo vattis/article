@@ -20,11 +20,9 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Article article;
 
-    @Column(nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Member member;
 

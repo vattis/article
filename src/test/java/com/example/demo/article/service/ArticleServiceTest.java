@@ -30,8 +30,8 @@ class ArticleServiceTest {
     public void searchTest(){
         //given
         Member member = new Member(1L, "memberName1", "memberId1", "memberPw1", LocalDateTime.now());
-        Article article1 = Article.of(member, "title1", "content1");
-        Article article2 = Article.of(member, "title2", "content2");
+        Article article1 = Article.of(member, "title1", "content1", 0L, 0L);
+        Article article2 = Article.of(member, "title2", "content2", 0L, 0L);
         List<Article> articles = new ArrayList<>();
         PageRequest pageRequest = PageRequest.of(0, 2);
         articles.add(article1);
