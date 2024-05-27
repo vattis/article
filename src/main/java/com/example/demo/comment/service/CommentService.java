@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 @Slf4j
 public class CommentService {
     private final ArticleService articleService;
-    private final CommentService commentService;
     private final MemberService memberService;
     private final CommentRepository commentRepository;
 
