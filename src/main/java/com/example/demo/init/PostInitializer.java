@@ -20,7 +20,7 @@ public class PostInitializer {
     private final ArticleRepository articleRepository;
     private final MemberRepository memberRepository;
     private final CommentRepository commentRepository;
-    private final EntityManager em;
+    //private final EntityManager em;
 
     @PostConstruct
     public void init(){
@@ -38,7 +38,7 @@ public class PostInitializer {
             commentRepository.save(comment1);
             commentRepository.save(comment2);
         }
-        em.flush();
-        em.clear();
+        //em.flush();
+        //em.clear();
     }
 }

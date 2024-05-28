@@ -37,7 +37,7 @@ public class ArticleService {
 
     public Page<Article> search(SearchType searchType, String word, int pageNo){
         Pageable pageable = PageRequest.of(pageNo, PageConst.pageSize, Sort.by("id").ascending());
-        if(word.isEmpty()){
+        if(word == null || word.isEmpty()){
             return articleRepository.findAll(pageable);
         }
         else if(searchType == SearchType.TITLE){
