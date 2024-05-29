@@ -1,4 +1,4 @@
-package com.example.demo.article.Controller;
+package com.example.demo.article.controller;
 
 import com.example.demo.article.domain.Article;
 import com.example.demo.article.domain.SearchType;
@@ -11,8 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
@@ -37,6 +35,17 @@ public class ArticleController {
         Page<Article> articles = articleService.search(searchType, searchWord, pageNo);
         model.addAttribute("articles", articles);
         return "/Articles";
+    }
+
+    @GetMapping("/article")
+    public String gotoArticle(@RequestParam Long articleId, Model model){
+        Article article = articleService.findById(articleId);
+        model.addAttribute("article", article);
+        return "/Article";
+    }
+    @GetMapping("/addArticle")
+    public String goto_add_article(){
+        return "/AddArticle";
     }
 
 }

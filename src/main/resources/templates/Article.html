@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${article.getTitle()}">게시글</title>
+</head>
+<body>
+    <div id="article">
+        <h2 th:text="${article.getTitle()}"></h2>
+        <p th:text="${article.getContent()}"></p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <header th:fragment="header_tool (param1)">
+        <p>안녕하세요, <span th:text="${param1}"></span></p>
+        <button type="button" onclick="href.location='/logout'">로그아웃</button>
+    </header>
+</body>
+</html>

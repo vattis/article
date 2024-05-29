@@ -24,7 +24,7 @@ public class PostInitializer {
 
     @PostConstruct
     public void init(){
-        for(int i = 1; i <= 10; i++){
+        for(int i = 1; i <= 100; i++){
             Member member = Member.makeSample(i);
             Article article = Article.makeSample(member, i);
             Comment comment1 = Comment.of(article, member, "comment content A"+i, LocalDateTime.now());
