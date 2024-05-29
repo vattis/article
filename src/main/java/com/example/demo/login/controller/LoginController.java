@@ -3,8 +3,7 @@ package com.example.demo.login.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
@@ -18,5 +17,11 @@ public class LoginController {
     @GetMapping("/logout")
     public String logout(){
         return "redirect:/articles";
+    }
+
+    @PostMapping("/test")
+    @ResponseBody
+    public String test(){
+        return "<h1>test 통과</h1>";
     }
 }
