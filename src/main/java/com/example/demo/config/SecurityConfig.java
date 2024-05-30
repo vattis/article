@@ -1,54 +1,61 @@
 package com.example.demo.config;
 
-import com.example.demo.filter.JwtAuthenticationFilter;
-import com.example.demo.login.jwt.JwtProvider;
+import com.example.demo.login.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 
-
-@Configuration
-@RequiredArgsConstructor
+@Configuration                   //spring security 설정
 @EnableWebSecurity
-public class SecurityConfig {
-    private final JwtProvider jwtTokenProvider;
+@RequiredArgsConstructor
+public class SecurityConfig  {   //WebSecurityConfigurerAdapter 상속받아서 하는 설정 방식은 deprecated됨.
+    //대신 개발자가 직접 component-based security 설정을 할 수 있도록 변경되었다. 즉 커스텀 할 설정들을 @Bean으로 등록하여 사용한다.
+
+    private final JwtTokenProvider jwtTokenProvider;
+
+    private String[] allowUrl = {         //인증, 인가 작업을 할 필요없는 url들 모아둠.
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-resources/**",
+            "/sign/**",
+            "/users/**"
+    };
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
-                // REST API이므로 basic auth 및 csrf 보안을 사용하지 않음
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(AbstractHttpConfigurer::disable)
-                // JWT를 사용하기 때문에 세션을 사용하지 않음
-                .sessionManagement(sessionManagementConfigurer -> sessionManagementConfigurer
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize
-                        // 해당 API에 대해서는 모든 요청을 허가
-//                        .requestMatchers("/api/signup", "/api/signin").permitAll()
-                        // 이 밖에 모든 요청에 대해서 인증을 필요로 한다는 설정
-                        .anyRequest().permitAll())
-//                        // USER 권한이 있어야 요청할 수 있음
-//                        .requestMatchers("/members/test").hasRole("USER"))
-                // JWT 인증을 위하여 직접 구현한 필터를 UsernamePasswordAuthenticationFilter 전에 실행
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
-                        UsernamePasswordAuthenticationFilter.class
-                )
-                .build();
-    }
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        // BCrypt Encoder 사용
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        httpSecurity.httpBasic().disable()
+                .cors()
+                .and()
+                .csrf().disable()
+                .sessionManagement()
+                .sessionCreationPolicy(
+                        SessionCreationPolicy.STATELESS   //restapi 기반의 동작 방식 설정.
+                )                                         // 세션이 아니니 stateless
+
+
+                .and()
+                .authorizeHttpRequests()       //authorizedRequests, antMatchers는 deprecated되서 사용 안 함.
+                .requestMatchers(allowUrl).permitAll()
+                .requestMatchers(HttpMethod.GET, "/boards/**").permitAll()  //boards로 시작하는 get요청은 다 허용한다는 의미.
+//                .anyRequest().anonymous()   //기타 요청은 인증을 받지 않아도 모두 접근 가능.
+                .anyRequest().authenticated()
+
+                .and()
+                .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())            //권한을 확인하는 과정에서 예외발생 시 전달할 예외 처리
+
+                .and()
+                .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())            //인증과정에서 발생하는 예외 처리
+
+                .and()
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class); //후자의 필터로 가기전 Jwt필터를 먼저 거치겠다는 것.
+
+
+        return httpSecurity.build();
     }
 }
