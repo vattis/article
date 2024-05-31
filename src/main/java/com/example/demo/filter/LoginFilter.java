@@ -1,6 +1,6 @@
 package com.example.demo.filter;
 
-import com.example.demo.login.jwt.JWTUtil;
+import com.example.demo.login.jwt.JwtUtil;
 import com.example.demo.member.domain.Member;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +20,7 @@ import java.util.Iterator;
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
-    private final JWTUtil jwtUtil;
+    private final JwtUtil jwtUtil;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {

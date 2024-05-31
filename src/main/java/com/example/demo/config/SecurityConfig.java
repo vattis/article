@@ -1,7 +1,8 @@
 package com.example.demo.config;
 
-import com.cheering.auth.jwt.JwtAuthenticationFilter;
-import com.cheering.auth.jwt.JwtProvider;
+
+import com.example.demo.filter.JwtAuthenticationFilter;
+import com.example.demo.login.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

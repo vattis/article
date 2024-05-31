@@ -1,6 +1,6 @@
 package com.example.demo.filter;
 
-import com.cheering.auth.constant.JwtConstant;
+import com.example.demo.login.jwt.JwtConstant;
 import com.example.demo.login.jwt.JwtProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

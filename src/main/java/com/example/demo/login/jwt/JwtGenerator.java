@@ -7,9 +7,6 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 
-import static com.cheering.auth.constant.JwtConstant.ACCESS_TOKEN_EXPIRE_TIME;
-import static com.cheering.auth.constant.JwtConstant.GRANT_TYPE;
-import static com.cheering.auth.constant.JwtConstant.REFRESH_TOKEN_EXPIRE_TIME;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -19,6 +16,8 @@ import java.security.Key;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import static com.example.demo.login.jwt.JwtConstant.*;
 
 @Component
 public class JwtGenerator {
