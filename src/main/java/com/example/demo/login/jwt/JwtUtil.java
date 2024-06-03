@@ -22,14 +22,15 @@ public class JwtUtil {
     private final Key key;
     private final long accessTokenExpTime;
 
-    public JwtUtil(@Value("${spring.jwt.secret}") String secretKey, @Value("${spring.jwt.expiration_time}") long accessTokenExpTime){
+    public JwtUtil(@Value("${spring.jwt.secret}") String secretKey,
+                   @Value("${spring.jwt.expiration_time}") Long accessTokenExpTime){
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
-        this.accessTokenTime = accessTokenExpTime;
+        this.accessTokenExpTime = accessTokenExpTime;
     }
 
     public String createAccessToken(CustomMemberInfoDto member){
-        return create
+        return createToken(member, accessTokenExpTime);
     }
 
     private String createToken(CustomMemberInfoDto member, long expireTime){
@@ -48,8 +49,8 @@ public class JwtUtil {
                 .signWith(key, SignatureAlgorithm.ES256)
                 .compact();
     }
-    public Long getMemberId(String token){
-        return parseClaims(token).get("memberId", Long.class);
+    public Long getId(String token){
+        return parseClaims(token).get("id", Long.class);
     }
 
     public boolean validateToken(String token){
@@ -57,6 +58,8 @@ public class JwtUtil {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         }catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e){
+            log.info("Invalid JWT Token", e);
+        }catch(ExpiredJwtException e){
             log.info("Expire JWT Token", e);
         }catch(UnsupportedJwtException e){
             log.info("Unsupported JWT token", e);

@@ -2,10 +2,16 @@ package com.example.demo.config;
 
 
 import com.example.demo.filter.JwtAuthenticationFilter;
+import com.example.demo.handler.CustomAccessDeniedHandler;
+import com.example.demo.handler.CustomAuthenticationEntryPoint;
 import com.example.demo.login.jwt.JwtProvider;
+import com.example.demo.login.jwt.JwtUtil;
+import com.example.demo.member.service.CustomMemberDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -18,36 +24,44 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
-    private final JwtProvider jwtTokenProvider;
+    private final CustomMemberDetailService customMemberDetailService;
+    private final JwtUtil jwtUtil;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
+    private static final String[] AUTH_WHITELIST = {
+            "/api/v1/member/**",
+            "/swagger-ui/**",
+            "/api-docs",
+            "/swagger-ui-custom.html",
+            "/v3/api-docs/**",
+            "/api-docs/**",
+            "/swagger-ui.html",
+            "/api/v1/auth/**"
+    };
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
-                // REST API이므로 basic auth 및 csrf 보안을 사용하지 않음
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(AbstractHttpConfigurer::disable)
-                // JWT를 사용하기 때문에 세션을 사용하지 않음
-                .sessionManagement(sessionManagementConfigurer -> sessionManagementConfigurer
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize
-                        // 해당 API에 대해서는 모든 요청을 허가
-//                        .requestMatchers("/api/signup", "/api/signin").permitAll()
-                        // 이 밖에 모든 요청에 대해서 인증을 필요로 한다는 설정
-                        .anyRequest().permitAll())
-//                        // USER 권한이 있어야 요청할 수 있음
-//                        .requestMatchers("/members/test").hasRole("USER"))
-                // JWT 인증을 위하여 직접 구현한 필터를 UsernamePasswordAuthenticationFilter 전에 실행
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
-                        UsernamePasswordAuthenticationFilter.class
-                )
-                .build();
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+        http.csrf((csrf)->csrf.disable());
+        http.cors(Customizer.withDefaults());
+
+        http.sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(
+                SessionCreationPolicy.STATELESS));
+        http.formLogin((form)->form.disable());
+        http.httpBasic(AbstractHttpConfigurer::disable);
+
+        http.addFilterBefore(new JwtAuthenticationFilter(customMemberDetailService, jwtUtil), UsernamePasswordAuthenticationFilter.class);
+        http.exceptionHandling((exceptionHandling)->exceptionHandling
+                .authenticationEntryPoint(authenticationEntryPoint)
+                .accessDeniedHandler(accessDeniedHandler)
+        );
+        http.authorizeHttpRequests(authorize->authorize
+                .requestMatchers(AUTH_WHITELIST).permitAll()
+                .anyRequest().permitAll()
+                .anyRequest().authenticated()
+        );
+        return http.build();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        // BCrypt Encoder 사용
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
 }
