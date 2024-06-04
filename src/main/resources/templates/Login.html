@@ -1,18 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
 </head>
 <body>
-    <div id="login">
-        <form action="/login" method="post" th:object="${loginForm}">
-            <fieldset>
-                <label>아이디<input type="text" th:field="*{memberId}" size="20"></label>
-                <br>
-                <label>패스워드<input type="password" th:field="*{memberPw}" size="20"></label>
-            </fieldset>
-        </form>
-    </div>
+<section id="login">
+    <h2>로그인</h2>
+    <form action="/login" method="post" th:object="${loginForm}">
+        <fieldset>
+            <label>아이디: <input type="text" th:field="*{memberId}" size="20"></label>
+            <br>
+            <div class="field-error" th:errors="*{memberId}">아이디 부족</div>
+            <label>비밀번호: <input type="password" th:field="*{memberPw}" size="20"></label>
+            <div class="field-error" th:errors="*{memberPw}">패스워드 부족</div>
+            <div th:if="${#fields.hasGlobalErrors()}">
+                <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">
+                    전체 오류 메시지</p>
+            </div>
+            <br>
+            <input type="submit" value="로그인">
+        </fieldset>
+    </form>
+</section>
 </body>
 </html>

@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -18,4 +20,6 @@ public class MemberService {
     public Long addMember(Member member){
         return memberRepository.save(member).getId();
     }
+
+    public Member findByMemberId(String memberId){return memberRepository.findMemberByMemberId(memberId).orElse(null); }
 }
