@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+import java.net.http.HttpRequest;
 import java.util.Objects;
 
 @Slf4j
@@ -73,6 +74,16 @@ public class LoginController {
                 response.addCookie(cookie);
             }
         }
+        return "redirect:/articles";
+    }
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response){
+        HttpSession session = request.getSession();
+        session.invalidate();
+        Cookie cookie = new Cookie(LoginConst.LOGIN_MEMBER_ID, null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
         return "redirect:/articles";
     }
 

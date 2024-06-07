@@ -5,6 +5,15 @@
     <title>Title</title>
 </head>
 <body>
-
+    <header th:fragment="login_member_header (login_name, login_id)">
+        <p>안녕하세요, <span th:text="${login_name}"></span>님</p>
+        <form action="/myPage" method="get">
+            <input type="hidden" id="login_id" name="login_id" th:value="${login_id}">
+            <button type="submit">마이 페이지</button>
+        </form>
+        <form action="/logout" method="get">
+            <button type="submit">로그아웃</button>
+        </form>
+    </header>
 </body>
 </html>

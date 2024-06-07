@@ -6,7 +6,12 @@
 </head>
 <body>
     <section id="top_tool">
-
+        <div th:if="${not #strings.isEmpty(memberDto)}">
+            <span th:insert="~{/LoginToolHeader :: login_member_header(${memberDto.getName()}, ${memberDto.getId()})}"></span>
+        </div>
+        <div th:unless="${not #strings.isEmpty(memberDto)}">
+            <span th:insert="~{/NotLoginToolHeader :: not_login_header}"></span>
+        </div>
     </section>
     <section id="article_list">
         <table>
