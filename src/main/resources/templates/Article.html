@@ -5,9 +5,35 @@
     <title th:text="${article.getTitle()}">게시글</title>
 </head>
 <body>
+    <section id="top_tool">
+        <div th:if="${not #strings.isEmpty(memberDto)}">
+            <span th:insert="~{/LoginToolHeader :: login_member_header(${memberDto.getName()}, ${memberDto.getId()})}"></span>
+        </div>
+        <div th:unless="${not #strings.isEmpty(memberDto)}">
+            <span th:insert="~{/NotLoginToolHeader :: not_login_header}"></span>
+        </div>
+    </section>
     <div id="article">
         <h2 th:text="${article.getTitle()}"></h2>
         <p th:text="${article.getContent()}"></p>
+    </div>
+    <div id="likes">
+        <form action="/likes" method="post">
+            <input type="hidden" id="articleId" name="articleId" th:value="${article.getId()}">
+            <button type="submit">추천</button>
+        </form>
+    </div>
+    <div id="comments">
+        <table>
+            <tbody>
+                <tr th:each="comment : ${article.getComments()}">
+                    <td><a th:text="${comment.getMember().getName()}"></a></td>
+                    <td><a th:text="${comment.getContent()}"></a></td>
+                    <td><a th:text="${comment.getCreatedTime()}"></a></td>
+                </tr>
+
+            </tbody>
+        </table>
     </div>
 </body>
 </html>

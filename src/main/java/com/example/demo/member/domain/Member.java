@@ -9,9 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Getter
@@ -42,6 +40,10 @@ public class Member{
     @OneToMany(mappedBy = "member")
     private final List<Comment> comments = new ArrayList<>();
 
+    @ElementCollection
+    @CollectionTable(name="LIKED_ARTICLES")
+    public Set<Long> likedArticles = new HashSet<>();
+
     public static Member of(String name, String memberId, String memberPw, LocalDateTime createdDate){
         return Member.builder()
                 .name(name)
@@ -51,7 +53,7 @@ public class Member{
                 .build();
     }
     public static Member makeSample(int i){
-        return new Member(null, "name"+i, "memberId"+i, "memberPw"+i, LocalDateTime.now());
+        return new Member(null, "name"+i, "memberId"+i, "memberPw"+i, LocalDateTime.now(), new HashSet<>());
     }
     @Override
     public boolean equals(Object o) {

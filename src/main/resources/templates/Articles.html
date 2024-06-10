@@ -16,9 +16,15 @@
     <section id="article_list">
         <table>
             <tbody>
+                <tr>
+                    <th scope="col">제목</th>
+                    <th scope="col">작성자</th>
+                    <th scope="col">조회수</th>
+                    <th scope="col">추천</th>
+                </tr>
                 <tr th:each="article : ${articles}">
                     <td><a th:href="@{/article(articleId=${article.getId()})}"><span th:text="${article.getTitle()}"></span></a></td>
-                    <td><a th:text="${article.getMember.getName()}"></a></td>
+                    <td><a th:href="@{/member(memberId=${article.member.getId()})}"><span th:text="${article.getMember().getName()}"></span></a></td>
                     <td><a th:text="${article.getViewership()}"></a></td>
                     <td><a th:text="${article.getLikes()}"></a></td>
                 </tr>

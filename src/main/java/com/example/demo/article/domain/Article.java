@@ -55,6 +55,8 @@ public class Article {
                 .likes(0L)
                 .build();
     }
+    public void upViews(){viewership++;}
+    public void upLikes(){likes++;}
     public static Article of(Member member, String title, String content, Long viewership, Long likes){
         return Article.builder()
                 .member(member)

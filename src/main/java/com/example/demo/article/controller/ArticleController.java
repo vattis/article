@@ -12,10 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -42,17 +41,23 @@ public class ArticleController {
         }
         Page<Article> articles = articleService.search(searchType, searchWord, pageNo);
         model.addAttribute("articles", articles);
+        /*
         if(loginMemberId != null){
             Member member = memberService.findOne(loginMemberId);
             model.addAttribute("memberDto", MemberDto.from(member));
         }
+        */
+        loginMemberSet(loginMemberId, model);
         return "/Articles";
     }
 
     @GetMapping("/article")
-    public String gotoArticle(@RequestParam Long articleId, Model model){
+    public String gotoArticle(@RequestParam Long articleId, Model model,
+                              @SessionAttribute(name = LoginConst.LOGIN_MEMBER_ID, required = false) Long loginMemberId){
         Article article = articleService.findById(articleId);
+        articleService.increaseViewership(article);
         model.addAttribute("article", article);
+        loginMemberSet(loginMemberId, model);
         return "/Article";
     }
     @GetMapping("/addArticle")
@@ -60,4 +65,22 @@ public class ArticleController {
         return "/AddArticle";
     }
 
+    @PostMapping("/likes")
+    public String likes(@SessionAttribute(name = LoginConst.LOGIN_MEMBER_ID, required = false) Long loginMemberId,
+                        @ModelAttribute("articleId")Long articleId, BindingResult bindingResult, Model model){
+        if(loginMemberId == null){
+            bindingResult.addError(new ObjectError("articleId", "추천은 회원만 가능합니다."));
+            return "redirect:/article?articleId="+articleId;
+        }
+        Member viewer = memberService.findOne(loginMemberId);
+        Article article = articleService.findById(articleId);
+        articleService.likesArticle(article, viewer);
+        return "redirect:/article?articleId="+articleId;
+    }
+    public void loginMemberSet(Long loginMemberId, Model model){
+        if(loginMemberId != null){
+            Member member = memberService.findOne(loginMemberId);
+            model.addAttribute("memberDto", MemberDto.from(member));
+        }
+    }
 }

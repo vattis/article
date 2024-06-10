@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>회원정보</title>
+</head>
+<body>
+    <h2 th:text="${memberDetailDto.getName()}"></h2>
+    <p>게시글</p>
+    <table>
+        <tbody>
+            <tr th:each="article:${memberDetailDto.getArticles()}">
+                <td><a th:href="@{/article(articleId=${article.getId()})}"><span th:text="${article.getContent()}"></span></a></td>
+            </tr>
+        </tbody>
+    </table>
+    <p>댓글</p>
+    <table>
+        <tbody>
+        <tr th:each="comment:${memberDetailDto.getComments()}">
+            <td><a th:href="@{/article(articleId=${comment.getArticle().getId()})}"><span th:text="${comment.getContent()}"></span></a></td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>
