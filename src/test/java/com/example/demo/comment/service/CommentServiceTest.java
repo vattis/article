@@ -36,7 +36,7 @@ class CommentServiceTest {
         given(articleService.findById(1L)).willReturn(article);
         given(memberService.findOne(1L)).willReturn(member);
         //when
-        commentService.addComment(1L, 1L, "content1");
+        commentService.addComment(article, member, "content1");
         //then
         assertThat(member.getComments().get(0).getContent()).isEqualTo("content1");
         assertThat(article.getComments().get(0).getContent()).isEqualTo("content1");

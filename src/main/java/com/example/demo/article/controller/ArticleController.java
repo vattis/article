@@ -3,6 +3,8 @@ package com.example.demo.article.controller;
 import com.example.demo.article.domain.Article;
 import com.example.demo.article.domain.SearchType;
 import com.example.demo.article.service.ArticleService;
+import com.example.demo.comment.domain.Comment;
+import com.example.demo.comment.service.CommentService;
 import com.example.demo.login.domain.LoginConst;
 import com.example.demo.member.domain.Member;
 import com.example.demo.member.domain.MemberDto;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class ArticleController {
     private final ArticleService articleService;
+    private final CommentService commentService;
     private final MemberService memberService;
     @GetMapping("/articles")
     public String gotoArticles(@RequestParam(value="pageNo", defaultValue = "0", required = false) Integer pageNo ,
@@ -52,11 +55,16 @@ public class ArticleController {
     }
 
     @GetMapping("/article")
-    public String gotoArticle(@RequestParam Long articleId, Model model,
+    public String gotoArticle(@RequestParam Long articleId, @RequestParam(defaultValue = "0") int pageNo, Model model,
                               @SessionAttribute(name = LoginConst.LOGIN_MEMBER_ID, required = false) Long loginMemberId){
         Article article = articleService.findById(articleId);
         articleService.increaseViewership(article);
+        Page<Comment> commentPage = commentService.getCommentWithPage(article, pageNo);
         model.addAttribute("article", article);
+        model.addAttribute("comments", commentPage);
+        int commentPageNum = article.getComments().size()/20 + 1;
+        model.addAttribute("commentPageNum", commentPageNum);
+        model.addAttribute("maxPageSize", 10);
         loginMemberSet(loginMemberId, model);
         return "/Article";
     }

@@ -26,14 +26,32 @@
     <div id="comments">
         <table>
             <tbody>
-                <tr th:each="comment : ${article.getComments()}">
+                <tr th:each="comment : ${comments}">
                     <td><a th:text="${comment.getMember().getName()}"></a></td>
                     <td><a th:text="${comment.getContent()}"></a></td>
                     <td><a th:text="${comment.getCreatedTime()}"></a></td>
                 </tr>
-
             </tbody>
         </table>
     </div>
+    <nav id="comment_page_index" style="text-align: center">
+        <ul class="pagination" th:with="start=${(comments.number/maxPageSize)*maxPageSize+1}, end=(${(comments.totalPages==0)?1:(start+(maxPageSize - 1)<comments.totalPages?start+(maxPageSize - 1):comments.totalPages)})">
+            <li th:if="${start>1}">
+                <a th:href="@{/article(pageNo=0)}" th:text="'<<'"></a>
+            </li>
+            <li th:if="${start>1}">
+                <a th:href="@{/article(articleId=${article.getId()}, pageNo=${start - maxPageSize})}" th:text="'<'"></a>
+            </li>
+            <li th:each="page:${#numbers.sequence(start, end)}">
+                <a th:text="${page}" th:href="@{/article(articleId=${article.getId()}, pageNo=${page - 1})}"></a>
+            </li>
+            <li th:if="${end < comments.totalPages}">x
+                <a th:href="@{/article(articleId=${article.getId()}, pageNo=${start+maxPageSize})}" th:text="'>'"></a>
+            </li>
+            <li>
+                <a th:href="@{/article(articleId=${article.getId()}, pageNo=${comments.totalPages - 1}  )}" th:text="'>>'"></a>
+            </li>
+        </ul>
+    </nav>
 </body>
 </html>
