@@ -2,10 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/css/ArticlesStyle.css?after}" type="text/css">
+    <title>게시판</title>
 </head>
 <body>
-    <section id="top_tool">
+    <section class="top_tool">
         <div th:if="${not #strings.isEmpty(memberDto)}">
             <span th:insert="~{/LoginToolHeader :: login_member_header(${memberDto.getName()}, ${memberDto.getId()})}"></span>
         </div>
@@ -13,23 +14,44 @@
             <span th:insert="~{/NotLoginToolHeader :: not_login_header}"></span>
         </div>
     </section>
-    <section id="article_list">
-        <table>
-            <tbody>
+    <section class="article">
+        <section class="article_list">
+            <table>
+                <thead>
                 <tr>
+                    <th scope="col">번호</th>
                     <th scope="col">제목</th>
                     <th scope="col">작성자</th>
                     <th scope="col">조회수</th>
                     <th scope="col">추천</th>
                 </tr>
+                </thead>
+                <tbody>
                 <tr th:each="article : ${articles}">
-                    <td><a th:href="@{/article(articleId=${article.getId()})}"><span th:text="${article.getTitle()}"></span></a></td>
+                    <td><a th:text="${article.getId()}"></a></td>
+                    <td class="article_title"><a th:href="@{/article(articleId=${article.getId()})}"> <span th:text="${article.getTitle()}"></span></a></td>
                     <td><a th:href="@{/member(memberId=${article.member.getId()})}"><span th:text="${article.getMember().getName()}"></span></a></td>
                     <td><a th:text="${article.getViewership()}"></a></td>
                     <td><a th:text="${article.getLikes()}"></a></td>
                 </tr>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </section>
+        <section class="footer">
+            <form>
+                <label>
+                    <select name="searchType">
+                        <option value="TITLE">제목</option>
+                        <option value="CONTENT">내용</option>
+                        <option value="USER">글쓴이</option>
+                        <option value="COMMENT">댓글</option>
+                    </select>
+                </label>
+                <label><input type="text" name="searchWord"></label>
+                <button type="submit">검색</button>
+            </form>
+        </section>
     </section>
+
 </body>
 </html>

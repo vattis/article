@@ -1,0 +1,52 @@
+body{
+
+}
+.top_tool div{
+    display: inline;
+    text-align: right;
+}
+article{
+    width: 85%;
+}
+.article_list table{
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+}
+tbody tr{
+    background-color: white;
+    border: 2px solid gray;
+}
+thead tr th{
+    text-align: center;
+}
+thead tr th:nth-child(2){
+    text-align: left;
+}
+thead th:nth-child(1){
+    width:10%
+}
+thead th:nth-child(2){
+    width:50%
+}
+thead th:nth-child(3){
+    width:20%
+}
+thead th:nth-child(4){
+    width:10%
+}
+thead th:nth-child(4){
+    width:10%
+}
+tbody tr:hover{
+    background-color: lightgray;
+}
+tbody tr td{
+    text-align: center;
+}
+tbody tr td.article_title{
+    text-align: left;
+}
+footer form{
+    text-align: right;
+}

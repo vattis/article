@@ -2,16 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/LoginToolHeaderStyle.css?after}" type="text/css">
     <title>Title</title>
 </head>
 <body>
     <header th:fragment="login_member_header (login_name, login_id)">
-        <p>안녕하세요, <span th:text="${login_name}"></span>님</p>
-        <form action="/myPage" method="get">
+        <a>안녕하세요, <span th:text="${login_name}"></span>님</a><br>
+        <form action="/myPage" method="get" style="display:inline">
             <input type="hidden" id="login_id" name="login_id" th:value="${login_id}">
             <button type="submit">마이 페이지</button>
         </form>
-        <form action="/logout" method="get">
+        <form action="/logout" method="get" style="display:inline">
             <button type="submit">로그아웃</button>
         </form>
     </header>
