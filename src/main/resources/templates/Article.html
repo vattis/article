@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/ArticleStyle.css?}" type="text/css">
     <title th:text="${article.getTitle()}">게시글</title>
 </head>
 <body>
-    <section id="top_tool">
+    <section class="top_tool">
         <div th:if="${not #strings.isEmpty(memberDto)}">
             <span th:insert="~{/LoginToolHeader :: login_member_header(${memberDto.getName()}, ${memberDto.getId()})}"></span>
         </div>
@@ -13,16 +14,23 @@
             <span th:insert="~{/NotLoginToolHeader :: not_login_header}"></span>
         </div>
     </section>
-    <div id="article">
+    <section class="article">
         <h2 th:text="${article.getTitle()}"></h2>
+        <span class="article_info">
+            <span class="member"><a th:href="@{/member(memberId=${article.getMember().getId()})}" th:text="${article.getMember().getName()}"></a></span>
+            <a>추천  |  <span th:text="${article.getLikes()}"></span></a>
+            <a>댓글  |  <span th:text="${article.getComments().size()}"></span></a>
+            <a>조회수  |  <span th:text="${article.getViewership()}"></span></a>
+            <a th:with="datetime=${article.getDateTime()}">작성일 <span th:text="${#temporals.format(datetime, 'yyyy-MM-dd HH:mm:ss')}"></span></a>
+        </span>
         <p th:text="${article.getContent()}"></p>
-    </div>
-    <div id="likes">
-        <form action="/likes" method="post">
-            <input type="hidden" id="articleId" name="articleId" th:value="${article.getId()}">
-            <button type="submit">추천</button>
-        </form>
-    </div>
+        <div id="likes">
+            <form action="/likes" method="post">
+                <input type="hidden" id="articleId" name="articleId" th:value="${article.getId()}">
+                <button type="submit">추천</button>
+            </form>
+        </div>
+    </section>
     <div id="comments">
         <table>
             <tbody>

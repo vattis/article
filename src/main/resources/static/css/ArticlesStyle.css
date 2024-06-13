@@ -1,21 +1,23 @@
 body{
 
 }
-.top_tool div{
-    display: inline;
-    text-align: right;
-}
-article{
-    width: 85%;
+.article{
+    width: 80%;
 }
 .article_list table{
     table-layout: fixed;
     width: 100%;
     border-collapse: collapse;
 }
+.top_tool {
+    text-align: right;
+}
+.footer form{
+    text-align: right;
+}
 tbody tr{
     background-color: white;
-    border: 2px solid gray;
+    border: 1px solid gray;
 }
 thead tr th{
     text-align: center;
@@ -47,6 +49,4 @@ tbody tr td{
 tbody tr td.article_title{
     text-align: left;
 }
-footer form{
-    text-align: right;
-}
+

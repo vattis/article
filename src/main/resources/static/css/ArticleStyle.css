@@ -1,0 +1,34 @@
+body{
+
+}
+.top_tool {
+    text-align: right;
+}
+.article{
+    width: 80%;
+}
+.article h2{
+    border-bottom: 1px solid grey;
+    border-top: 1px solid grey;
+    background-color: lightgray;
+    margin: 0;
+}
+.article_info{
+    display: flex;
+    justify-content: right;
+    border-bottom: 1px solid gray;
+    height: 20px;
+    box-sizing: border-box;
+}
+.article_info a{
+    text-align: center;
+    position: relative;
+}
+.article_info.member{
+    display: flex;
+    justify-content: left;
+}
+.article_info.member a{
+    text-align: center;
+    position: relative;
+}
