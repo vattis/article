@@ -23,21 +23,23 @@
             <a>조회수  |  <span th:text="${article.getViewership()}"></span></a>
             <a th:with="datetime=${article.getDateTime()}">작성일 <span th:text="${#temporals.format(datetime, 'yyyy-MM-dd HH:mm:ss')}"></span></a>
         </span>
-        <p th:text="${article.getContent()}"></p>
-        <div id="likes">
+        <div class="article_content">
+            <p th:text="${article.getContent()}"></p>
+        </div>
+        <div class="likes">
             <form action="/likes" method="post">
                 <input type="hidden" id="articleId" name="articleId" th:value="${article.getId()}">
                 <button type="submit">추천</button>
             </form>
         </div>
     </section>
-    <div id="comments">
+    <div class="comments">
+        <p><b>댓글</b></p>
         <table>
             <tbody>
                 <tr th:each="comment : ${comments}">
-                    <td><a th:text="${comment.getMember().getName()}"></a></td>
+                    <td th:with="datetime=${comment.getCreatedTime()}" class="comment_header"><a th:text="${comment.getMember().getName()}"></a><a th:text="${#temporals.format(datetime, 'yyyy-MM-dd HH:mm:ss')}"></a></td>
                     <td><a th:text="${comment.getContent()}"></a></td>
-                    <td><a th:text="${comment.getCreatedTime()}"></a></td>
                 </tr>
             </tbody>
         </table>

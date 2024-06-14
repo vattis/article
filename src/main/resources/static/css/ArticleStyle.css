@@ -19,16 +19,37 @@ body{
     border-bottom: 1px solid gray;
     height: 20px;
     box-sizing: border-box;
+    flex:initial;
 }
 .article_info a{
     text-align: center;
     position: relative;
 }
-.article_info.member{
-    display: flex;
-    justify-content: left;
-}
 .article_info.member a{
+    float: left;
     text-align: center;
     position: relative;
+}
+.article_content{
+    min-height: 500px;
+}
+.likes{
+    text-align: center;
+}
+.comments p{
+    border-bottom: 1px solid grey;
+    border-top: 1px solid grey;
+    background-color: lightgray;
+    line-height: 30px;
+    height: 30px;
+    margin: 0;
+}
+.comments.comment_header{
+    border-bottom: 1px solid grey;
+    border-top: 1px solid grey;
+    background-color: lightgray;
+}
+.comments table tbody.comment_header{
+    width:100%;
+    display:block;
 }
