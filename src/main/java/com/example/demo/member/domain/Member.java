@@ -2,6 +2,7 @@ package com.example.demo.member.domain;
 
 import com.example.demo.article.domain.Article;
 import com.example.demo.comment.domain.Comment;
+import com.example.demo.friendship.domain.Friendship;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,12 @@ public class Member{
 
     @OneToMany(mappedBy = "member")
     private final List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "toFriend")
+    private final List<Friendship> toFriends = new ArrayList<>();
+
+    @OneToMany(mappedBy = "fromFriend")
+    private final List<Friendship> fromFriends = new ArrayList<>();
 
     @ElementCollection
     @CollectionTable(name="LIKED_ARTICLES")
