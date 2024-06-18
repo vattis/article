@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,7 +30,7 @@ class ArticleServiceTest {
     @DisplayName("search test")
     public void searchTest(){
         //given
-        Member member = new Member(1L, "memberName1", "memberId1", "memberPw1", LocalDateTime.now());
+        Member member = new Member(1L, "memberName1", "memberId1", "memberPw1", LocalDateTime.now(), new HashSet<>());
         Article article1 = Article.of(member, "title1", "content1", 0L, 0L);
         Article article2 = Article.of(member, "title2", "content2", 0L, 0L);
         List<Article> articles = new ArrayList<>();

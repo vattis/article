@@ -15,6 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,7 +31,7 @@ class MemberServiceTest {
     @DisplayName("save & find Test")
     public void saveTest(){
         //given
-        Member member = new Member(1L, "memberName1", "memberId1", "memberPw1", LocalDateTime.now());
+        Member member = new Member(1L, "memberName1", "memberId1", "memberPw1", LocalDateTime.now(), new HashSet<>());
         given(memberRepository.save(member)).willReturn(member);
         given(memberRepository.findById(1L)).willReturn(Optional.of(member));
         //when

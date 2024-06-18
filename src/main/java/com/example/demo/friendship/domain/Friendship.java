@@ -2,10 +2,7 @@ package com.example.demo.friendship.domain;
 
 import com.example.demo.member.domain.Member;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -13,9 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 @Getter
 @Builder
+@AllArgsConstructor
 @RequiredArgsConstructor
 public class Friendship {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Long id;
 
     @ManyToOne(fetch=FetchType.LAZY, optional = false)

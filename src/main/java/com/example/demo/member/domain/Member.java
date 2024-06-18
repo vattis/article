@@ -47,6 +47,7 @@ public class Member{
     @OneToMany(mappedBy = "fromFriend")
     private final List<Friendship> fromFriends = new ArrayList<>();
 
+    @Builder.Default
     @ElementCollection
     @CollectionTable(name="LIKED_ARTICLES")
     public Set<Long> likedArticles = new HashSet<>();

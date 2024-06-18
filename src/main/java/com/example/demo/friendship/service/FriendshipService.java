@@ -26,40 +26,36 @@ public class FriendshipService {
     }
     public void addFriend(Member fromFriend, Member toFriend){
         Optional<Friendship> friendship1 = friendshipRepository.findByFromFriendAndToFriend(fromFriend, toFriend);
-        Optional<Friendship> friendship2 = getReverseFriendship(friendship1.get());
+        Optional<Friendship> friendship2;
         if(friendship1.isEmpty()){
             friendship1 = Optional.of(Friendship.of(null, fromFriend, toFriend, true, false));
             friendshipRepository.save(friendship1.get());
-
-        }
-        else {//이미 친구추가가 돼있는 경우
-
-        }
-        if(friendship2.isEmpty()){
             friendship2 = Optional.of(Friendship.of(null, toFriend, fromFriend, false, false));
             friendshipRepository.save(friendship2.get());
         }
-        else{//이미 친구추가가 돼있는 경우
-
+        else {//이미 친구추가가 돼있는 경우
+            return;
         }
     }
     public void acceptFriend(Member member, Friendship friendship){
         if(Objects.equals(member.getId(), friendship.getToFriend().getId())){
-            Optional<Friendship> reverseFriendship = getReverseFriendship(friendship);
+            Friendship reverseFriendship = getReverseFriendship(friendship);
+
             friendship.setAccepted(true);
-            reverseFriendship.get().setAccepted(true);
+            reverseFriendship.setAccepted(true);
             friendship.setBothAccepted(true);
-            reverseFriendship.get().setBothAccepted(true);
-        }else{
+            reverseFriendship.setBothAccepted(true);
+        }else{ //현재 사용자가 친구수락 대상자랑 다른 경우
             throw new RuntimeException();
         }
     }
     public void denyFriendship(Member member, Friendship friendship){
         if(Objects.equals(member.getId(), friendship.getToFriend().getId())){
+            friendshipRepository.delete(getReverseFriendship(friendship));
             friendshipRepository.delete(friendship);
         }
     }
-    public Optional<Friendship> getReverseFriendship(Friendship friendship){
-        return friendshipRepository.findByFromFriendAndToFriend(friendship.getToFriend(), friendship.getFromFriend());
+    public Friendship getReverseFriendship(Friendship friendship){
+        return friendshipRepository.findByFromFriendAndToFriend(friendship.getToFriend(), friendship.getFromFriend()).orElse(null);
     }
 }
