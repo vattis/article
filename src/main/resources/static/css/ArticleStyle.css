@@ -6,6 +6,7 @@ body{
 }
 .article{
     width: 80%;
+    border-right: solid lightgray 1px;
 }
 .article h2{
     border-bottom: 1px solid grey;
@@ -35,6 +36,16 @@ body{
 }
 .likes{
     text-align: center;
+    position: relative;
+    bottom: 20px;
+}
+.writer_tool{
+    text-align: right;
+    position:relative;
+    right: 3%;
+    bottom: 10px;
+}
+.comments{
 }
 .comments p{
     border-bottom: 1px solid grey;

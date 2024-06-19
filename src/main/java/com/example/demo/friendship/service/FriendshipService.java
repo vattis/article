@@ -39,8 +39,7 @@ public class FriendshipService {
     }
     public void acceptFriend(Member member, Friendship friendship){
         if(Objects.equals(member.getId(), friendship.getToFriend().getId())){
-            Friendship reverseFriendship = getReverseFriendship(friendship);
-
+            Friendship reverseFriendship = this.getReverseFriendship(friendship);
             friendship.setAccepted(true);
             reverseFriendship.setAccepted(true);
             friendship.setBothAccepted(true);
@@ -53,6 +52,13 @@ public class FriendshipService {
         if(Objects.equals(member.getId(), friendship.getToFriend().getId())){
             friendshipRepository.delete(getReverseFriendship(friendship));
             friendshipRepository.delete(friendship);
+        }
+    }
+    public void deleteFriendship(Member member, Friendship friendship){
+        if(Objects.equals(member.getId(), friendship.getFromFriend().getId())){
+            Friendship reverseFriendship = getReverseFriendship(friendship);
+            friendshipRepository.delete(friendship);
+            friendshipRepository.delete(reverseFriendship);
         }
     }
     public Friendship getReverseFriendship(Friendship friendship){
