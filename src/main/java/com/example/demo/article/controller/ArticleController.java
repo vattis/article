@@ -1,6 +1,7 @@
 package com.example.demo.article.controller;
 
 import com.example.demo.article.domain.Article;
+import com.example.demo.article.domain.EditArticleDto;
 import com.example.demo.article.domain.SearchType;
 import com.example.demo.article.service.ArticleService;
 import com.example.demo.comment.domain.Comment;
@@ -17,6 +18,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
@@ -90,5 +94,33 @@ public class ArticleController {
             Member member = memberService.findOne(loginMemberId);
             model.addAttribute("memberDto", MemberDto.from(member));
         }
+    }
+    @GetMapping("/editArticle")
+    public String gotoEditArticle(@RequestParam("articleId") Long articleId, Model model,
+                                  @SessionAttribute(name = LoginConst.LOGIN_MEMBER_ID, required = false) Long loginMemberId){
+        Article article = articleService.findById(articleId);
+        if(Objects.equals(article.getMember().getId(), loginMemberId)){
+            EditArticleDto editArticleDto = EditArticleDto.of(loginMemberId, articleId, article.getTitle(), article.getContent(), LocalDateTime.now());
+            model.addAttribute("editArticleDto", editArticleDto);
+            loginMemberSet(loginMemberId, model);
+        }
+        return "/EditArticle";
+    }
+    @PostMapping("/editArticle")
+    public String editArticle(@ModelAttribute("editArticleDto")EditArticleDto editArticleDto,
+                              @SessionAttribute(name = LoginConst.LOGIN_MEMBER_ID, required = false) Long loginMemberId){
+        if(Objects.equals(editArticleDto.getMemberId(), loginMemberId)){
+            Member member = memberService.findOne(editArticleDto.getMemberId());
+            editArticleDto.setEditedDate(LocalDateTime.now());
+            articleService.editArticle(editArticleDto.getArticleId(), member, editArticleDto.getTitle(), editArticleDto.getContent());
+            log.info("############################################");
+        }
+        return "redirect:/article?articleId="+editArticleDto.getArticleId();
+    }
+    @GetMapping("/deleteArticle")
+    public String deleteArticle(@RequestParam("articleId")Long articleId,
+                                @SessionAttribute(name = LoginConst.LOGIN_MEMBER_ID, required = false) Long loginMemberId){
+        articleService.deleteArticle(articleId, loginMemberId);
+        return "redirect:/articles";
     }
 }

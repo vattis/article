@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -65,5 +66,18 @@ public class ArticleService {
         }
         return null;
     }
-
+    public Article editArticle(Long articleId, Member member, String title, String content){
+        Article article = articleRepository.findById(articleId).get();
+        if(Objects.equals(article.getMember().getId(), member.getId())){
+            article.setTitle(title);
+            article.setContent(content);
+        }
+        return article;
+    }
+    public void deleteArticle(Long articleId, Long loginMemberId){
+        Article article = articleRepository.findById(articleId).get();
+        if(Objects.equals(article.getMember().getId(), loginMemberId)){
+            articleRepository.delete(article);
+        }
+    }
 }

@@ -33,8 +33,10 @@
             </form>
         </div>
         <div class="writer_tool">
-            <button onclick="location.href='/editArticle'">수정</button>
-            <button onclick="location.href='/deleteArticle'">삭제</button>
+            <form>
+                <input type="button" th:onclick="|location.href='@{/editArticle(articleId=${article.getId()})}'|" name="edit" value="수정">
+                <input type="button" th:onclick="|location.href='@{/deleteArticle(articleId=${article.getId()})}'|" value="삭제">
+            </form>
         </div>
     </section>
     <div class="comments">
