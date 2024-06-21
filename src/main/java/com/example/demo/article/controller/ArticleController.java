@@ -113,7 +113,6 @@ public class ArticleController {
             Member member = memberService.findOne(editArticleDto.getMemberId());
             editArticleDto.setEditedDate(LocalDateTime.now());
             articleService.editArticle(editArticleDto.getArticleId(), member, editArticleDto.getTitle(), editArticleDto.getContent());
-            log.info("############################################");
         }
         return "redirect:/article?articleId="+editArticleDto.getArticleId();
     }

@@ -18,10 +18,10 @@
         <h2 th:text="${article.getTitle()}"></h2>
         <span class="article_info">
             <span class="member"><a th:href="@{/member(memberId=${article.getMember().getId()})}" th:text="${article.getMember().getName()}"></a></span>
-            <a>추천  |  <span th:text="${article.getLikes()}"></span></a>
-            <a>댓글  |  <span th:text="${article.getComments().size()}"></span></a>
-            <a>조회수  |  <span th:text="${article.getViewership()}"></span></a>
-            <a th:with="datetime=${article.getDateTime()}">작성일 <span th:text="${#temporals.format(datetime, 'yyyy-MM-dd HH:mm:ss')}"></span></a>
+            <a>|  추천  <span th:text="${article.getLikes()}"></span></a>
+            <a>|  댓글  <span th:text="${article.getComments().size()}"></span></a>
+            <a>|  조회수  <span th:text="${article.getViewership()}"></span></a>
+            <a th:with="datetime=${article.getDateTime()}">|  작성일 <span th:text="${#temporals.format(datetime, 'yyyy-MM-dd HH:mm:ss')}"></span></a>
         </span>
         <div class="article_content">
             <p th:text="${article.getContent()}"></p>
@@ -34,7 +34,7 @@
         </div>
         <div class="writer_tool">
             <form>
-                <input type="button" th:onclick="|location.href='@{/editArticle(articleId=${article.getId()})}'|" name="edit" value="수정">
+                <input type="button" th:onclick="|location.href='@{/editArticle(articleId=${article.getId()})}'" name="edit" value="수정">
                 <input type="button" th:onclick="|location.href='@{/deleteArticle(articleId=${article.getId()})}'|" value="삭제">
             </form>
         </div>
