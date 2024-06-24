@@ -1,10 +1,16 @@
 package com.example.demo.friendship.service;
 
+import com.example.demo.article.domain.PageConst;
 import com.example.demo.friendship.domain.Friendship;
 import com.example.demo.friendship.repository.FriendshipRepository;
 import com.example.demo.member.domain.Member;
+import com.example.demo.member.domain.MemberDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +29,14 @@ public class FriendshipService {
     }
     public List<Friendship> findAllByFromFriend(Member fromFriend){
         return friendshipRepository.findAllByFromFriend(fromFriend);
+    }
+    public Page<MemberDto> findBothAcceptedFriend(Member member, int pageNo){
+        Pageable pageable = PageRequest.of(pageNo, PageConst.pageSize, Sort.by("id").ascending());
+        return friendshipRepository.findByFromFriendAndBothAccepted(member, true, pageable).map(MemberDto::fromMemberToToMember);
+    }
+    public Page<MemberDto> findNonAcceptedFriend(Member member, int pageNo){
+        Pageable pageable = PageRequest.of(pageNo, PageConst.pageSize, Sort.by("id").ascending());
+        return friendshipRepository.findByToFriendAndAccepted(member, false, pageable).map(MemberDto::toMemberToFromMember);
     }
     public void addFriend(Member fromFriend, Member toFriend){
         Optional<Friendship> friendship1 = friendshipRepository.findByFromFriendAndToFriend(fromFriend, toFriend);

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>친구 수락 목록</title>
+</head>
+<body>
+    <section class="friends">
+        <table>
+            <tbody>
+            <tr th:each="member : ${members}">
+                <td class="member-name"><a th:href="@{/member(memberId=${member.getId()})}"> <span th:text="${member.getName()}"></span></a></td>
+                <td><a th:href="@{/acceptFriendship(memberId=${member.getId()})}"><span>친구 수락</span></a></td>
+                <td><a th:href="@{/deleteFriendship}"><span>친구삭제</span></a></td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</body>
+</html>
