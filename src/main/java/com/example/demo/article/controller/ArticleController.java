@@ -54,6 +54,9 @@ public class ArticleController {
             model.addAttribute("memberDto", MemberDto.from(member));
         }
         */
+        if(model.getAttribute(LoginConst.LOGIN_MEMBER_ID) != null){
+            log.info("###################################");
+        }
         loginMemberSet(loginMemberId, model);
         return "/Articles";
     }

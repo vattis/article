@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>친구</title>
+</head>
+<body>
+    <section class="top_tool">
+        <div th:if="${not #strings.isEmpty(memberDto)}">
+            <span th:insert="~{/LoginToolHeader :: login_member_header(${memberDto.getName()}, ${memberDto.getId()})}"></span>
+        </div>
+        <div th:unless="${not #strings.isEmpty(memberDto)}">
+            <span th:insert="~{/NotLoginToolHeader :: not_login_header}"></span>
+        </div>
+    </section>
+    <ul>
+        <li><p><a href="/friends">친구 목록</a></p></li>
+        <li><p><a href="/invitedFriends">받은 초대</a></p></li>
+        <li><p><a href="/sendedInvite">보낸 초대</a></p></li>
+    </ul>
+</body>
+</html>

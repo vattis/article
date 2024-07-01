@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>초대한 친구</title>
+</head>
+<body>
+    <section class="top_tool">
+        <div th:if="${not #strings.isEmpty(memberDto)}">
+            <span th:insert="~{/LoginToolHeader :: login_member_header(${memberDto.getName()}, ${memberDto.getId()})}"></span>
+        </div>
+        <div th:unless="${not #strings.isEmpty(memberDto)}">
+            <span th:insert="~{/NotLoginToolHeader :: not_login_header}"></span>
+        </div>
+    </section>
+<section class="sendedInvitedFriends">
+    <table>
+        <tbody>
+        <tr th:each="member : ${members}">
+            <td class="member-name"><a th:href="@{/member(memberId=${member.getId()})}"> <span th:text="${member.getName()}"></span></a></td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+</body>
+</html>

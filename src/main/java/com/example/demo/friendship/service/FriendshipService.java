@@ -34,6 +34,10 @@ public class FriendshipService {
         Pageable pageable = PageRequest.of(pageNo, PageConst.pageSize, Sort.by("id").ascending());
         return friendshipRepository.findByFromFriendAndBothAccepted(member, true, pageable).map(MemberDto::fromMemberToToMember);
     }
+    public Page<MemberDto> findSendedInviteFriend(Member member, int pageNo){
+        Pageable pageable = PageRequest.of(pageNo, PageConst.pageSize, Sort.by("id").ascending());
+        return friendshipRepository.findByFromFriendAndBothAccepted(member, false, pageable).map(MemberDto::fromMemberToToMember);
+    }
     public Page<MemberDto> findNonAcceptedFriend(Member member, int pageNo){
         Pageable pageable = PageRequest.of(pageNo, PageConst.pageSize, Sort.by("id").ascending());
         return friendshipRepository.findByToFriendAndAccepted(member, false, pageable).map(MemberDto::toMemberToFromMember);
