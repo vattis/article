@@ -1,5 +1,6 @@
 package com.example.demo.member.service;
 
+import com.example.demo.member.domain.EditMemberDto;
 import com.example.demo.member.domain.Member;
 import com.example.demo.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
@@ -22,4 +23,10 @@ public class MemberService {
     }
 
     public Member findByMemberId(String memberId){return memberRepository.findMemberByMemberId(memberId).orElse(null); }
+    public Member updateMember(Member member, EditMemberDto editMemberDto){
+        if(editMemberDto.getPassword().equals(editMemberDto.getPasswordConfirm())){
+            member.updateMember(editMemberDto);
+        }
+        return null;
+    }
 }

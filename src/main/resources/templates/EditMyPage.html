@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>내 정보 수정</title>
+</head>
+<body>
+    <form action="/editMyPage" th:object="${editMemberDto}" method="post">
+        <input type="hidden" th:field="*{id}">
+        <label>이름
+            <input type="text" th:field="*{name}">
+        </label>
+        <label>비밀번호
+            <input type="password" th:field="*{password}">
+        </label>
+        <label>비밀번호확인
+            <input type="password" th:field="*{passwordConfirm}">
+        </label>
+    </form>
+</body>
+</html>

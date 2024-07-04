@@ -5,6 +5,14 @@
     <title>친구 리스트</title>
 </head>
 <body>
+    <section class="top_tool">
+        <div th:if="${not #strings.isEmpty(memberDto)}">
+            <span th:insert="~{/LoginToolHeader :: login_member_header(${memberDto.getName()}, ${memberDto.getId()})}"></span>
+        </div>
+        <div th:unless="${not #strings.isEmpty(memberDto)}">
+            <span th:insert="~{/NotLoginToolHeader :: not_login_header}"></span>
+        </div>
+    </section>
     <section class="friends">
         <table>
             <tbody>

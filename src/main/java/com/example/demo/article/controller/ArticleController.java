@@ -10,6 +10,7 @@ import com.example.demo.login.domain.LoginConst;
 import com.example.demo.member.domain.Member;
 import com.example.demo.member.domain.MemberDto;
 import com.example.demo.member.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -31,7 +32,8 @@ public class ArticleController {
     private final CommentService commentService;
     private final MemberService memberService;
     @GetMapping("/articles")
-    public String gotoArticles(@RequestParam(value="pageNo", defaultValue = "0", required = false) Integer pageNo ,
+    public String gotoArticles(@RequestParam(value="pageNo", defaultValue = "0", required = false) Integer pageNo,
+                               HttpServletRequest request,
                                @SessionAttribute(name = LoginConst.LOGIN_MEMBER_ID, required = false) Long loginMemberId,
                                Model model){
         String searchTag = (String)model.getAttribute("searchTag");
@@ -48,16 +50,6 @@ public class ArticleController {
         }
         Page<Article> articles = articleService.search(searchType, searchWord, pageNo);
         model.addAttribute("articles", articles);
-        /*
-        if(loginMemberId != null){
-            Member member = memberService.findOne(loginMemberId);
-            model.addAttribute("memberDto", MemberDto.from(member));
-        }
-        */
-        if(model.getAttribute(LoginConst.LOGIN_MEMBER_ID) != null){
-            log.info("###################################");
-        }
-        loginMemberSet(loginMemberId, model);
         return "/Articles";
     }
 
@@ -72,7 +64,6 @@ public class ArticleController {
         int commentPageNum = article.getComments().size()/20 + 1;
         model.addAttribute("commentPageNum", commentPageNum);
         model.addAttribute("maxPageSize", 10);
-        loginMemberSet(loginMemberId, model);
         return "/Article";
     }
     @GetMapping("/addArticle")

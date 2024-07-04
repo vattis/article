@@ -70,4 +70,8 @@ public class Member{
         Member member = (Member) o;
         return id != null && id.equals(member.id);
     }
+    public void updateMember(EditMemberDto editMemberDto){
+        this.name = editMemberDto.getName();
+        this.memberPw = editMemberDto.getPassword();
+    }
 }

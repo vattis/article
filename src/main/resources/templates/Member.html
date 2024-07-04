@@ -5,6 +5,10 @@
     <title>회원정보</title>
 </head>
 <body>
+    <form th:object="${memberDetailDto}" action="/editMyPage" method="get">
+        <input type="hidden" id = "memberId" name="memberId" th:value="${memberDetailDto.getId()}">
+        <input type="submit" value="수정">
+    </form>
     <h2 th:text="${memberDetailDto.getName()}"></h2>
     <p>게시글</p>
     <table>

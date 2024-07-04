@@ -1,6 +1,7 @@
 package com.example.demo.config;
 
 import com.example.demo.interceptor.LoginCheckInterceptor;
+import com.example.demo.interceptor.LoginMemberInterceptor;
 import com.example.demo.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -13,10 +14,14 @@ public class WebConfig implements WebMvcConfigurer {
     MemberService memberService;
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginCheckInterceptor(memberService))
+        registry.addInterceptor(new LoginCheckInterceptor())
                 .order(1)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/css/**", "/*.ico", "/error",
-                        "/login", "/articles", "/", "/images/**", "/createAccount", "/article");
+                .excludePathPatterns("/css/**", "/*.ico", "/error", "/login",
+                        "/articles", "/", "/images/**", "/createAccount", "/article");
+        registry.addInterceptor(new LoginMemberInterceptor(memberService))
+                .order(2)
+                .addPathPatterns("/**")
+                .excludePathPatterns("/css/**", "/*.ico", "/error");
     }
 }
