@@ -30,10 +30,8 @@ public class MemberController {
         return "/Member";
     }
     @GetMapping("/editMyPage")
-    public String gotoEditMyPage(Model model, HttpServletRequest request){
-        Long memberId = (Long)model.getAttribute("memberId");
+    public String gotoEditMyPage(Model model, HttpServletRequest request, @RequestParam("memberId")Long memberId){
         MemberDto loginMember = (MemberDto) request.getAttribute("memberDto");
-        log.info(memberId+"@!#!@!@#!@#!@#!@##!");
         if(loginMember != null){
             if(Objects.equals(loginMember.getId(), memberId)){
                 Member member = memberService.findOne(memberId);
@@ -52,8 +50,8 @@ public class MemberController {
         return "/EditMyPage";
     }
     @PostMapping("/editMyPage")
-    public String editMyPage(Model model){
-        EditMemberDto editMemberDto = (EditMemberDto)model.getAttribute("editMemberDto");
+    public String editMyPage(Model model, EditMemberDto editMemberDto){
+        // = (EditMemberDto)model.getAttribute("editMemberDto");
         Member member = memberService.findOne(editMemberDto.getId());
         memberService.updateMember(member, editMemberDto);
         return "redirect:/member?memberId=" + member.getId();
