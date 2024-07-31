@@ -27,14 +27,13 @@
             <p th:text="${article.getContent()}"></p>
         </div>
         <div class="likes">
-            <form action="/likes" method="post">
-                <input type="hidden" id="articleId" name="articleId" th:value="${article.getId()}">
+            <form th:action="@{/articles/{articleId}/like(articleId=${article.getId()})}">
                 <button type="submit">추천</button>
             </form>
         </div>
         <div class="writer_tool">
             <form>
-                <input type="button" th:onclick="|location.href='@{/editArticle(articleId=${article.getId()})}'" name="edit" value="수정">
+                <input type="button" th:onclick="|location.href='@{/editArticle(articleId=${article.getId()})}'|" name="edit" value="수정">
                 <input type="button" th:onclick="|location.href='@{/deleteArticle(articleId=${article.getId()})}'|" value="삭제">
             </form>
         </div>

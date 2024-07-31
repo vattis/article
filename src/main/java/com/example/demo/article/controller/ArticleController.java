@@ -53,8 +53,8 @@ public class ArticleController {
         return "/Articles";
     }
 
-    @GetMapping("/article")
-    public String gotoArticle(@RequestParam Long articleId, @RequestParam(defaultValue = "0") int pageNo, Model model,
+    @GetMapping("/articles/{articleId}")
+    public String gotoArticle(@PathVariable("articleId") Long articleId, @RequestParam(defaultValue = "0") int pageNo, Model model,
                               @SessionAttribute(name = LoginConst.LOGIN_MEMBER_ID, required = false) Long loginMemberId){
         Article article = articleService.findById(articleId);
         articleService.increaseViewership(article);
@@ -71,17 +71,17 @@ public class ArticleController {
         return "/AddArticle";
     }
 
-    @PostMapping("/likes")
+    @PatchMapping("/articles/{articleId}/like")
     public String likes(@SessionAttribute(name = LoginConst.LOGIN_MEMBER_ID, required = false) Long loginMemberId,
-                        @ModelAttribute("articleId")Long articleId, BindingResult bindingResult, Model model){
+                        @PathVariable("articleId")Long articleId, BindingResult bindingResult, Model model){
         if(loginMemberId == null){
             bindingResult.addError(new ObjectError("articleId", "추천은 회원만 가능합니다."));
-            return "redirect:/article?articleId="+articleId;
+            return "redirect:/article/"+articleId;
         }
         Member viewer = memberService.findOne(loginMemberId);
         Article article = articleService.findById(articleId);
         articleService.likesArticle(article, viewer);
-        return "redirect:/article?articleId="+articleId;
+        return "redirect:/article/"+articleId;
     }
     public void loginMemberSet(Long loginMemberId, Model model){
         if(loginMemberId != null){
