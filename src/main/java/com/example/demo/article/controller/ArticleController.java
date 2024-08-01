@@ -20,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -73,15 +74,14 @@ public class ArticleController {
 
     @PatchMapping("/articles/{articleId}/like")
     public String likes(@SessionAttribute(name = LoginConst.LOGIN_MEMBER_ID, required = false) Long loginMemberId,
-                        @PathVariable("articleId")Long articleId, BindingResult bindingResult, Model model){
+                        @PathVariable("articleId")Long articleId, Model model) throws AccessDeniedException {
         if(loginMemberId == null){
-            bindingResult.addError(new ObjectError("articleId", "추천은 회원만 가능합니다."));
-            return "redirect:/article/"+articleId;
+            throw new AccessDeniedException("회원만 추천할 수 있습니다.");
         }
         Member viewer = memberService.findOne(loginMemberId);
         Article article = articleService.findById(articleId);
         articleService.likesArticle(article, viewer);
-        return "redirect:/article/"+articleId;
+        return "redirect:/articles/"+articleId;
     }
     public void loginMemberSet(Long loginMemberId, Model model){
         if(loginMemberId != null){
@@ -100,7 +100,7 @@ public class ArticleController {
         }
         return "/EditArticle";
     }
-    @PostMapping("/editArticle")
+    @PutMapping("/articles/{articleId}")
     public String editArticle(@ModelAttribute("editArticleDto")EditArticleDto editArticleDto,
                               @SessionAttribute(name = LoginConst.LOGIN_MEMBER_ID, required = false) Long loginMemberId){
         if(Objects.equals(editArticleDto.getMemberId(), loginMemberId)){
@@ -108,10 +108,10 @@ public class ArticleController {
             editArticleDto.setEditedDate(LocalDateTime.now());
             articleService.editArticle(editArticleDto.getArticleId(), member, editArticleDto.getTitle(), editArticleDto.getContent());
         }
-        return "redirect:/article?articleId="+editArticleDto.getArticleId();
+        return "redirect:/articles/"+editArticleDto.getArticleId();
     }
-    @GetMapping("/deleteArticle")
-    public String deleteArticle(@RequestParam("articleId")Long articleId,
+    @DeleteMapping("/articles/{articleId}")
+    public String deleteArticle(@PathVariable("articleId")Long articleId,
                                 @SessionAttribute(name = LoginConst.LOGIN_MEMBER_ID, required = false) Long loginMemberId){
         articleService.deleteArticle(articleId, loginMemberId);
         return "redirect:/articles";

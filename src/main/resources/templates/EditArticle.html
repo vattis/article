@@ -15,7 +15,7 @@
     </div>
 </section>
 <section class="article">
-    <form action="/editArticle" method="post">
+    <form th:action="@{/articles/{articleId}(articleId=${editArticleDto.getArticleId()})}" th:method="put">
         <label class="article_title">
             <input type="text" name="title" th:value="${editArticleDto.getTitle()}">
         </label>
@@ -25,7 +25,7 @@
             <input type="hidden" name="articleId" th:field="*{articleId}">
             <input type="hidden" name="memberId" th:field="*{memberId}">
         </label>
-        <input type="submit" value="수정">
+        <button type="submit">수정</button>
     </form>
 </section>
 

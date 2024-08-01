@@ -30,7 +30,7 @@
                 <tr th:each="article : ${articles}">
                     <td><a th:text="${article.getId()}"></a></td>
                     <td class="article_title"><a th:href="@{/articles/{articleId}(articleId=${article.getId()})}"> <span th:text="${article.getTitle()}"></span></a></td>
-                    <td><a th:href="@{/member(memberId=${article.member.getId()})}"><span th:text="${article.getMember().getName()}"></span></a></td>
+                    <td><a th:href="@{/members/{memberId}(memberId=${article.member.getId()})}"><span th:text="${article.getMember().getName()}"></span></a></td>
                     <td><a th:text="${article.getViewership()}"></a></td>
                     <td><a th:text="${article.getLikes()}"></a></td>
                 </tr>

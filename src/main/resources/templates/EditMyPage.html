@@ -5,7 +5,7 @@
     <title>내 정보 수정</title>
 </head>
 <body>
-    <form action="/editMyPage" th:object="${editMemberDto}" method="post">
+    <form th:action="@{/members/{memberId}(memberId=${editMemberDto.getId()})}" th:object="${editMemberDto}" th:method="put">
         <input type="hidden" th:field="*{id}">
         <label>이름
             <input type="text" th:field="*{name}">
@@ -16,7 +16,7 @@
         <label>비밀번호확인
             <input type="password" th:field="*{passwordConfirm}">
         </label>
-        <input type="submit" value="확인">
+        <button type="submit">확인</button>
     </form>
 </body>
 </html>
