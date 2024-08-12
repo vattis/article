@@ -33,12 +33,11 @@ public class ArticleController {
     private final CommentService commentService;
     private final MemberService memberService;
     @GetMapping("/articles")
-    public String gotoArticles(@RequestParam(value="pageNo", defaultValue = "0", required = false) Integer pageNo,
-                               HttpServletRequest request,
+    public String gotoArticles(@RequestParam(value="searchType", defaultValue = "") String searchTag,
+                               @RequestParam(value="searchWord", defaultValue = "") String searchWord,
+                               @RequestParam(value="pageNo", defaultValue = "0", required = false) Integer pageNo,
                                @SessionAttribute(name = LoginConst.LOGIN_MEMBER_ID, required = false) Long loginMemberId,
                                Model model){
-        String searchTag = (String)model.getAttribute("searchTag");
-        String searchWord = (String)model.getAttribute("word");
         SearchType searchType = SearchType.ALL;
         if(searchTag != null){
             searchType = switch (searchTag) {
@@ -46,7 +45,7 @@ public class ArticleController {
                 case "content" -> SearchType.CONTENT;
                 case "user" -> SearchType.USER;
                 case "comment" -> SearchType.COMMENT;
-                default -> searchType;
+                default -> SearchType.ALL;
             };
         }
         Page<Article> articles = articleService.search(searchType, searchWord, pageNo);

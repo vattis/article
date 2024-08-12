@@ -54,15 +54,21 @@ public class ArticleService {
             return articleRepository.findAll(pageable);
         }
         else if(searchType == SearchType.TITLE){
-            return articleRepository.findAllByTitle(word, pageable);
+            return articleRepository.findAllByTitleContaining(word, pageable);
         }
         else if(searchType == SearchType.USER){
-            return articleRepository.findAllByMemberName(word, pageable);
+            return articleRepository.findAllByMemberNameContaining(word, pageable);
+        }
+        else if(searchType == SearchType.CONTENT){
+            return articleRepository.findAllByContentContaining(word, pageable);
         }
         else if(searchType == SearchType.COMMENT){
             List<Comment> comments = commentRepository.findAllByContent(word);
             int start = (int)pageable.getOffset();
             int end = Math.min((start+pageable.getPageSize()), comments.size());
+        }
+        else if(searchType == SearchType.ALL){
+
         }
         return null;
     }

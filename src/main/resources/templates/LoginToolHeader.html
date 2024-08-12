@@ -11,7 +11,7 @@
         <form th:action="@{/members/{memberId}(memberId=${login_id})}" method="get" style="display:inline">
             <button type="submit">마이 페이지</button>
         </form>
-        <form action="/friends" method="get" style="display:inline">
+        <form th:action="@{/members/{memberId}/friends(memberId=${login_id})}" method="get" style="display:inline">
             <button type="submit">친구</button>
         </form>
         <form action="/logout" method="get" style="display:inline">
