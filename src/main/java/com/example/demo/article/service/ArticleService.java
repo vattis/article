@@ -68,7 +68,7 @@ public class ArticleService {
             int end = Math.min((start+pageable.getPageSize()), comments.size());
         }
         else if(searchType == SearchType.ALL){
-
+            return articleRepository.findAllByTitleContainingOrMemberNameContainingOrContentContaining(word, word, word, pageable);
         }
         return null;
     }

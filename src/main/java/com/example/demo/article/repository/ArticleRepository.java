@@ -10,4 +10,5 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     Page<Article> findAllByTitleContaining(String keyword, Pageable pageable);
     Page<Article> findAllByContentContaining(String keyword, Pageable pageable);
     Page<Article> findAllByMemberNameContaining(String keyword, Pageable pageable);
+    Page<Article> findAllByTitleContainingOrMemberNameContainingOrContentContaining(String keyword, String memberName, String content, Pageable pageable);
 }

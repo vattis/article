@@ -33,11 +33,12 @@ public class ArticleController {
     private final CommentService commentService;
     private final MemberService memberService;
     @GetMapping("/articles")
-    public String gotoArticles(@RequestParam(value="searchType", defaultValue = "") String searchTag,
+    public String gotoArticles(@RequestParam(value="searchTag", defaultValue = "") String searchTag,
                                @RequestParam(value="searchWord", defaultValue = "") String searchWord,
                                @RequestParam(value="pageNo", defaultValue = "0", required = false) Integer pageNo,
                                @SessionAttribute(name = LoginConst.LOGIN_MEMBER_ID, required = false) Long loginMemberId,
                                Model model){
+        log.info("searchTag:{}, searchWord:{}", searchTag, searchWord);
         SearchType searchType = SearchType.ALL;
         if(searchTag != null){
             searchType = switch (searchTag) {
