@@ -35,7 +35,7 @@ public class ArticleController {
     @GetMapping("/articles")
     public String gotoArticles(@RequestParam(value="searchTag", defaultValue = "") String searchTag,
                                @RequestParam(value="searchWord", defaultValue = "") String searchWord,
-                               @RequestParam(value="pageNo", defaultValue = "0", required = false) Integer pageNo,
+                               @RequestParam(value="pageNo", defaultValue = "1", required = false) Integer pageNo,
                                @SessionAttribute(name = LoginConst.LOGIN_MEMBER_ID, required = false) Long loginMemberId,
                                Model model){
         log.info("searchTag:{}, searchWord:{}", searchTag, searchWord);
@@ -49,8 +49,9 @@ public class ArticleController {
                 default -> SearchType.ALL;
             };
         }
-        Page<Article> articles = articleService.search(searchType, searchWord, pageNo);
+        Page<Article> articles = articleService.search(searchType, searchWord, pageNo-1);
         model.addAttribute("articles", articles);
+        model.addAttribute("pageNo", pageNo);
         return "/Articles";
     }
 
