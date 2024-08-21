@@ -1,4 +1,4 @@
-package com.example.demo.interceptor;
+package com.example.demo.core.interceptor;
 
 import com.example.demo.login.domain.LoginConst;
 import com.example.demo.member.domain.Member;

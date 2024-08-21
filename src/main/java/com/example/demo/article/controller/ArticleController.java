@@ -6,6 +6,7 @@ import com.example.demo.article.domain.SearchType;
 import com.example.demo.article.service.ArticleService;
 import com.example.demo.comment.domain.Comment;
 import com.example.demo.comment.service.CommentService;
+import com.example.demo.core.exception.NotFoundException;
 import com.example.demo.login.domain.LoginConst;
 import com.example.demo.member.domain.Member;
 import com.example.demo.member.domain.MemberDto;
@@ -13,6 +14,7 @@ import com.example.demo.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -58,7 +60,7 @@ public class ArticleController {
     @GetMapping("/articles/{articleId}")
     public String gotoArticle(@PathVariable("articleId") Long articleId, @RequestParam(defaultValue = "0") int pageNo, Model model,
                               @SessionAttribute(name = LoginConst.LOGIN_MEMBER_ID, required = false) Long loginMemberId){
-        Article article = articleService.findById(articleId);
+        Article article = articleService.findById(articleId).orElseThrow(NotFoundException::new);
         articleService.increaseViewership(article);
         Page<Comment> commentPage = commentService.getCommentWithPage(article, pageNo);
         model.addAttribute("article", article);
@@ -80,7 +82,7 @@ public class ArticleController {
             throw new AccessDeniedException("회원만 추천할 수 있습니다.");
         }
         Member viewer = memberService.findOne(loginMemberId);
-        Article article = articleService.findById(articleId);
+        Article article = articleService.findById(articleId).orElseThrow(NotFoundException::new);
         articleService.likesArticle(article, viewer);
         return "redirect:/articles/"+articleId;
     }
@@ -93,7 +95,7 @@ public class ArticleController {
     @GetMapping("/editArticle")
     public String gotoEditArticle(@RequestParam("articleId") Long articleId, Model model,
                                   @SessionAttribute(name = LoginConst.LOGIN_MEMBER_ID, required = false) Long loginMemberId){
-        Article article = articleService.findById(articleId);
+        Article article = articleService.findById(articleId).orElseThrow(NotFoundException::new);
         if(Objects.equals(article.getMember().getId(), loginMemberId)){
             EditArticleDto editArticleDto = EditArticleDto.of(loginMemberId, articleId, article.getTitle(), article.getContent(), LocalDateTime.now());
             model.addAttribute("editArticleDto", editArticleDto);

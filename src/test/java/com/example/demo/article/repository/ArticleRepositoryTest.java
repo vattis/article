@@ -61,7 +61,7 @@ class ArticleRepositoryTest {
         PageRequest pageRequest = PageRequest.of(0, 1);
         //when
         List<Article> articles = articleRepository.findAll();
-        Page<Article> foundedArticle = articleRepository.findAllByTitle("title100", pageRequest);
+        Page<Article> foundedArticle = articleRepository.findAllByTitleContaining("title100", pageRequest);
 
         //then
         assertThat(articles.size()).isEqualTo(11);

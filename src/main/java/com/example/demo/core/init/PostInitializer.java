@@ -1,4 +1,4 @@
-package com.example.demo.init;
+package com.example.demo.core.init;
 
 import com.example.demo.article.domain.Article;
 import com.example.demo.article.repository.ArticleRepository;

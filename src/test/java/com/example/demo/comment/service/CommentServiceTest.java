@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,7 +34,7 @@ class CommentServiceTest {
         //given
         Member member = Member.makeSample(1);
         Article article = Article.makeSample(member,1);
-        given(articleService.findById(1L)).willReturn(article);
+        given(articleService.findById(1L)).willReturn(Optional.of(article));
         given(memberService.findOne(1L)).willReturn(member);
         //when
         commentService.addComment(article, member, "content1");

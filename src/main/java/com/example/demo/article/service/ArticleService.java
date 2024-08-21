@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -35,8 +36,8 @@ public class ArticleService {
         articleRepository.delete(article);
     }
     public void increaseViewership(Article article){article.upViews();}
-    public Article findById(Long id){
-        return articleRepository.findById(id).orElse(null);
+    public Optional<Article> findById(Long id){
+        return articleRepository.findById(id);
     }
 
     public boolean likesArticle(Article article, Member member){

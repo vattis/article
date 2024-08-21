@@ -1,7 +1,7 @@
-package com.example.demo.config;
+package com.example.demo.core.config;
 
-import com.example.demo.interceptor.LoginCheckInterceptor;
-import com.example.demo.interceptor.LoginMemberInterceptor;
+import com.example.demo.core.interceptor.LoginCheckInterceptor;
+import com.example.demo.core.interceptor.LoginMemberInterceptor;
 import com.example.demo.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

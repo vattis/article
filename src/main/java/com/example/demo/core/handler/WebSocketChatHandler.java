@@ -1,4 +1,4 @@
-package com.example.demo.handler;
+package com.example.demo.core.handler;
 
 import com.example.demo.chat.domain.ChatMessageDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
