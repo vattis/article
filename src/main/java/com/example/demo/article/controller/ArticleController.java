@@ -73,15 +73,11 @@ public class ArticleController {
 
     @PatchMapping("/articles/{articleId}/like")
     public String likes(@SessionAttribute(name = LoginConst.LOGIN_MEMBER_ID, required = false) Long loginMemberId,
-                        @PathVariable("articleId")Long articleId, BindingResult bindingResult, Model model){
-        if(loginMemberId == null){
-            bindingResult.addError(new ObjectError("articleId", "추천은 회원만 가능합니다."));
-            return "redirect:/article/"+articleId;
-        }
+                        @PathVariable("articleId")Long articleId, Model model){
         Member viewer = memberService.findOne(loginMemberId);
         Article article = articleService.findById(articleId);
         articleService.likesArticle(article, viewer);
-        return "redirect:/article/"+articleId;
+        return "redirect:/articles/"+articleId;
     }
     public void loginMemberSet(Long loginMemberId, Model model){
         if(loginMemberId != null){

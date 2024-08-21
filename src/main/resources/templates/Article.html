@@ -27,7 +27,7 @@
             <p th:text="${article.getContent()}"></p>
         </div>
         <div class="likes">
-            <form th:action="@{/articles/{articleId}/like(articleId=${article.getId()})}">
+            <form th:action="@{/articles/{articleId}/like(articleId=${article.getId()})}" th:method="patch">
                 <button type="submit">추천</button>
             </form>
         </div>
