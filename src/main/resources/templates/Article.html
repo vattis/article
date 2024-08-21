@@ -34,7 +34,9 @@
         <div class="writer_tool">
             <form>
                 <input type="button" th:onclick="|location.href='@{/editArticle(articleId=${article.getId()})}'|" name="edit" value="수정">
-                <input type="button" th:onclick="|location.href='@{/deleteArticle(articleId=${article.getId()})}'|" value="삭제">
+            </form>
+            <form th:onclick="@{/articles/{articleId}(articleId=${article.getId()})}" th:method="delete">
+                <button type="submit">삭제</button>
             </form>
         </div>
     </section>

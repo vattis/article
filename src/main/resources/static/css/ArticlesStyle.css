@@ -12,9 +12,7 @@ body{
 .top_tool {
     text-align: right;
 }
-.footer form{
-    text-align: right;
-}
+
 tbody tr{
     background-color: white;
     border: 1px solid gray;

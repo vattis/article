@@ -10,9 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
@@ -22,8 +20,8 @@ import java.util.Objects;
 public class MemberController {
     private final MemberService memberService;
 
-    @GetMapping("/member")
-    public String memberInfo(@RequestParam("memberId")Long memberId, Model model){
+    @GetMapping("/members/{memberId}")
+    public String memberInfo(@PathVariable("memberId")Long memberId, Model model){
         Member member = memberService.findOne(memberId);
         MemberDetailDto memberDetailDto = MemberDetailDto.from(member);
         model.addAttribute("memberDetailDto", memberDetailDto);
@@ -49,11 +47,10 @@ public class MemberController {
         }
         return "/EditMyPage";
     }
-    @PostMapping("/editMyPage")
-    public String editMyPage(Model model, EditMemberDto editMemberDto){
-        // = (EditMemberDto)model.getAttribute("editMemberDto");
+    @PutMapping("/members/{memberId}")
+    public String editMyPage(@PathVariable("memberId") Long memberId, Model model, EditMemberDto editMemberDto){
         Member member = memberService.findOne(editMemberDto.getId());
         memberService.updateMember(member, editMemberDto);
-        return "redirect:/member?memberId=" + member.getId();
+        return "redirect:/members/" + member.getId();
     }
 }

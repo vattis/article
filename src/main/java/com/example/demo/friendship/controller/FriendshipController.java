@@ -29,7 +29,7 @@ public class FriendshipController {
     public String gotoFriend(){
         return "/Friend";
     }
-    @GetMapping("/friends") //친구 목록
+    @GetMapping("/members/{memberId}/friends") //친구 목록
     public String gotoFriends(@SessionAttribute(name = LoginConst.LOGIN_MEMBER_ID, required = false) Long loginMemberId,
                               @RequestParam(name="pageNo", defaultValue = "0", required = false) int pageNo,
                               Model model){

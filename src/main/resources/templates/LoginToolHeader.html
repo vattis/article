@@ -8,11 +8,10 @@
 <body>
     <header th:fragment="login_member_header (login_name, login_id)">
         <a>안녕하세요, <span th:text="${login_name}"></span>님</a><br>
-        <form action="/myPage" method="get" style="display:inline">
-            <input type="hidden" id="login_id" name="login_id" th:value="${login_id}">
+        <form th:action="@{/members/{memberId}(memberId=${login_id})}" method="get" style="display:inline">
             <button type="submit">마이 페이지</button>
         </form>
-        <form action="/friend" method="get" style="display:inline">
+        <form th:action="@{/members/{memberId}/friends(memberId=${login_id})}" method="get" style="display:inline">
             <button type="submit">친구</button>
         </form>
         <form action="/logout" method="get" style="display:inline">

@@ -20,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -32,12 +33,12 @@ public class ArticleController {
     private final CommentService commentService;
     private final MemberService memberService;
     @GetMapping("/articles")
-    public String gotoArticles(@RequestParam(value="pageNo", defaultValue = "0", required = false) Integer pageNo,
-                               HttpServletRequest request,
+    public String gotoArticles(@RequestParam(value="searchTag", defaultValue = "") String searchTag,
+                               @RequestParam(value="searchWord", defaultValue = "") String searchWord,
+                               @RequestParam(value="pageNo", defaultValue = "1", required = false) Integer pageNo,
                                @SessionAttribute(name = LoginConst.LOGIN_MEMBER_ID, required = false) Long loginMemberId,
                                Model model){
-        String searchTag = (String)model.getAttribute("searchTag");
-        String searchWord = (String)model.getAttribute("word");
+        log.info("searchTag:{}, searchWord:{}", searchTag, searchWord);
         SearchType searchType = SearchType.ALL;
         if(searchTag != null){
             searchType = switch (searchTag) {
@@ -45,11 +46,12 @@ public class ArticleController {
                 case "content" -> SearchType.CONTENT;
                 case "user" -> SearchType.USER;
                 case "comment" -> SearchType.COMMENT;
-                default -> searchType;
+                default -> SearchType.ALL;
             };
         }
-        Page<Article> articles = articleService.search(searchType, searchWord, pageNo);
+        Page<Article> articles = articleService.search(searchType, searchWord, pageNo-1);
         model.addAttribute("articles", articles);
+        model.addAttribute("pageNo", pageNo);
         return "/Articles";
     }
 
@@ -73,7 +75,10 @@ public class ArticleController {
 
     @PatchMapping("/articles/{articleId}/like")
     public String likes(@SessionAttribute(name = LoginConst.LOGIN_MEMBER_ID, required = false) Long loginMemberId,
-                        @PathVariable("articleId")Long articleId, Model model){
+                        @PathVariable("articleId")Long articleId, Model model) throws AccessDeniedException {
+        if(loginMemberId == null){
+            throw new AccessDeniedException("회원만 추천할 수 있습니다.");
+        }
         Member viewer = memberService.findOne(loginMemberId);
         Article article = articleService.findById(articleId);
         articleService.likesArticle(article, viewer);
@@ -96,7 +101,7 @@ public class ArticleController {
         }
         return "/EditArticle";
     }
-    @PostMapping("/editArticle")
+    @PutMapping("/articles/{articleId}")
     public String editArticle(@ModelAttribute("editArticleDto")EditArticleDto editArticleDto,
                               @SessionAttribute(name = LoginConst.LOGIN_MEMBER_ID, required = false) Long loginMemberId){
         if(Objects.equals(editArticleDto.getMemberId(), loginMemberId)){
@@ -104,10 +109,10 @@ public class ArticleController {
             editArticleDto.setEditedDate(LocalDateTime.now());
             articleService.editArticle(editArticleDto.getArticleId(), member, editArticleDto.getTitle(), editArticleDto.getContent());
         }
-        return "redirect:/article?articleId="+editArticleDto.getArticleId();
+        return "redirect:/articles/"+editArticleDto.getArticleId();
     }
-    @GetMapping("/deleteArticle")
-    public String deleteArticle(@RequestParam("articleId")Long articleId,
+    @DeleteMapping("/articles/{articleId}")
+    public String deleteArticle(@PathVariable("articleId")Long articleId,
                                 @SessionAttribute(name = LoginConst.LOGIN_MEMBER_ID, required = false) Long loginMemberId){
         articleService.deleteArticle(articleId, loginMemberId);
         return "redirect:/articles";
